@@ -302,9 +302,12 @@
                     <span class="text-white font-bold text-2xl">E</span>
                 </div>
             </div>
-            <p class="text-gray-500 text-sm">&copy; 2024 EcoPulse. Environmental Monitoring System.</p>
+            <p class="text-gray-500 text-sm">&copy; <span id="footer-year"></span> EcoPulse. Built with ❤️ for environmental awareness.</p>
+            <p class="text-gray-500 text-xs mt-2">Hackathon 2024 • Environmental Data Initiative</p>
         </div>
     </footer>
+    <script>document.getElementById('footer-year').textContent = new Date().getFullYear();</script>
+
 
     <button id="scroll-to-top"
         class="fixed bottom-8 right-8 p-3 bg-eco-orange text-white rounded-full shadow-lg shadow-orange-500/20 opacity-0 invisible transition-all duration-300 hover:bg-orange-600 transform translate-y-4 hover:-translate-y-1 z-50">
