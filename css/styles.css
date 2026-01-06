@@ -761,6 +761,28 @@ input[type=range]::-webkit-slider-runnable-track {
     animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
+/* Loading indicators for dashboard */
+.dashboard-loader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.chart-loader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Spin animation for loading indicators */
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.animate-spin {
+    animation: spin 1s linear infinite;
+}
+
 /* Responsive dashboard */
 @media (max-width: 1024px) {
     .dashboard-card {

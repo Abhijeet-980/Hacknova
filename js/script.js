@@ -291,9 +291,11 @@ EcoPulse.DashboardManager = {
   init: function() {
     this.setupDashboardControls();
     this.setupChartTimeButtons();
+    this.showLoadingIndicators();
     this.updateDashboardData();
     this.startDataUpdates();
     this.initPollutionChart();
+    this.initLoadingAnimation();
   },
   
   setupDashboardControls: function() {
@@ -340,10 +342,16 @@ EcoPulse.DashboardManager = {
   },
   
   updateDashboardData: function() {
+    // Show loading indicators
+    this.showLoadingIndicators();
+    
     // Simulate real-time data updates
-    this.updateAirQuality();
-    this.updateWaterQuality();
-    this.updateNoiseLevel();
+    setTimeout(() => {
+      this.updateAirQuality();
+      this.updateWaterQuality();
+      this.updateNoiseLevel();
+      this.hideLoadingIndicators();
+    }, 500); // Simulate API delay
   },
   
   updateAirQuality: function() {
@@ -474,6 +482,69 @@ EcoPulse.DashboardManager = {
         ctx.height = 300;
         this.initPollutionChart();
       });
+    }
+  },
+  
+  // Show loading indicators on dashboard cards
+  showLoadingIndicators: function() {
+    const cards = document.querySelectorAll('.dashboard-card');
+    cards.forEach(card => {
+      // Add loading overlay
+      let loader = card.querySelector('.dashboard-loader');
+      if (!loader) {
+        loader = document.createElement('div');
+        loader.className = 'dashboard-loader absolute inset-0 bg-gray-900/70 flex items-center justify-center rounded-3xl';
+        loader.innerHTML = `
+          <div class="flex flex-col items-center">
+            <div class="w-8 h-8 border-4 border-eco-blue/30 border-t-eco-blue rounded-full animate-spin mb-2"></div>
+            <span class="text-sm text-gray-300">Updating data...</span>
+          </div>
+        `;
+        card.style.position = 'relative';
+        card.appendChild(loader);
+      }
+      loader.classList.remove('hidden');
+    });
+    
+    // Disable buttons during update
+    const modeButtons = document.querySelectorAll('.dashboard-mode-btn');
+    const timeButtons = document.querySelectorAll('.chart-time-btn');
+    modeButtons.forEach(btn => btn.disabled = true);
+    timeButtons.forEach(btn => btn.disabled = true);
+  },
+  
+  // Hide loading indicators
+  hideLoadingIndicators: function() {
+    const cards = document.querySelectorAll('.dashboard-card');
+    cards.forEach(card => {
+      const loader = card.querySelector('.dashboard-loader');
+      if (loader) {
+        loader.classList.add('hidden');
+      }
+    });
+    
+    // Re-enable buttons
+    const modeButtons = document.querySelectorAll('.dashboard-mode-btn');
+    const timeButtons = document.querySelectorAll('.chart-time-btn');
+    modeButtons.forEach(btn => btn.disabled = false);
+    timeButtons.forEach(btn => btn.disabled = false);
+  },
+  
+  // Initialize loading animation for the chart
+  initLoadingAnimation: function() {
+    const chartContainer = document.querySelector('.chart-container');
+    if (chartContainer) {
+      // Add loading indicator to chart container
+      const chartLoader = document.createElement('div');
+      chartLoader.className = 'chart-loader absolute inset-0 bg-gray-800/80 flex items-center justify-center rounded-xl hidden';
+      chartLoader.innerHTML = `
+        <div class="flex flex-col items-center">
+          <div class="w-8 h-8 border-4 border-eco-blue/30 border-t-eco-blue rounded-full animate-spin mb-2"></div>
+          <span class="text-sm text-gray-300">Loading chart...</span>
+        </div>
+      `;
+      chartContainer.style.position = 'relative';
+      chartContainer.appendChild(chartLoader);
     }
   }
 };
